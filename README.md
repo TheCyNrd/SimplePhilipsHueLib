@@ -28,6 +28,14 @@ Turn on Group ID 0 with Color:
 Turn off Group ID 0
 
         HueBridge.TurnOn(true,null,0,null)
+        
+Change Color of Bulp ID 1
+        
+        HueBridge.SetColor(Color.Blue, null,1);
+
+Change Color of Group ID 0
+        
+        HueBridge.SetColor(Color.Blue, 0);
 
 Effects
 
