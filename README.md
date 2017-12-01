@@ -17,11 +17,11 @@ Simple C# Library to Control Philips Hue
 
         HueBridge.TurnOn(false,null,null,1);
         
-Turn on Group ID 0:
+**Turn on Group ID 0:
 
         HueBridge.TurnOn(true,null,0,null)
 
-Turn on Group ID 0 with Color:
+**Turn on Group ID 0 with Color:
 
         HueBridge.TurnOn(true,Color.Red,0,null)
 
