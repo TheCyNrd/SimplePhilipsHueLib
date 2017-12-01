@@ -13,7 +13,9 @@ Turn on Bulp ID 1 with Color:
         HueBridge.TurnOn(true,Color.Red,null,1);
         
 Turn on Group ID 0:
+
         HueBridge.TurnOn(true,null,0,null)
 
 Turn on Group ID 0:
+
         HueBridge.TurnOn(true,null,0,null)
