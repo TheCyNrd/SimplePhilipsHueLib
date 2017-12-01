@@ -1,7 +1,7 @@
 # SimplePhilipsHueLib
 Simple C# Library to Control Philips Hue
 
-**Usage**
+##Usage
 
         PhilipsHue HueBridge = new PhilipsHue("YourBridgeIP", "YourUsername");
 
@@ -28,6 +28,8 @@ Simple C# Library to Control Philips Hue
 **Turn off Group ID 0**
 
         HueBridge.TurnOn(true,null,0,null)
+
+##Set Color
         
 **Change Color of Bulp ID 1**
         
@@ -37,7 +39,7 @@ Simple C# Library to Control Philips Hue
         
         HueBridge.SetColor(Color.Blue, 0);
 
-**Effects**
+##Effects
 
 **Colorloop on Bulp ID 1**
 
