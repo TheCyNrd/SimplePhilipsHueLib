@@ -1,19 +1,19 @@
 # SimplePhilipsHueLib
 Simple C# Library to Control Philips Hue
 
-Usage
+**Usage**
 
         PhilipsHue HueBridge = new PhilipsHue("YourBridgeIP", "YourUsername");
 
-Turn on Bulp ID 1
+**Turn on Bulp ID 1**
 
         HueBridge.TurnOn(true,null,null,1);
 
-Turn on Bulp ID 1 with Color:      
+**Turn on Bulp ID 1 with Color:**    
 
         HueBridge.TurnOn(true,Color.Red,null,1);
 
-Turn off Bulp ID 1
+**Turn off Bulp ID 1**
 
         HueBridge.TurnOn(false,null,null,1);
         
