@@ -1,6 +1,8 @@
 # SimplePhilipsHueLib
 Simple C# Library to Control Philips Hue
 
+## TestApp
+You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
 ## Usage
 
         PhilipsHue HueBridge = new PhilipsHue("YourBridgeIP", "YourUsername");
