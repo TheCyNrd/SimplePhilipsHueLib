@@ -39,84 +39,73 @@ public class PhilipsHue
 
     }
 
-    public void SetLight(Color color)
+    public void SetLight(Color color, int? group = null,int? bulp=0)
     {
         using (var client = new System.Net.WebClient())
         {
             Random rnd = new Random();
             Color c = Color.White;
-            var cmd = "groups/%int%/action";
-            var i = 0;
-            var groups = 1;
-
-
-            for (i = 0; i < groups; i++)
-            {
+            var cmd = "/lights/" + bulp + "/state";
+            if(group != null)
+            cmd = "groups/" + group + "/action";
+            
+            
                 c = color;
                 var xy = JsonConvert.SerializeObject(getRGBtoXY(color));
-                client.UploadData(url + cmd.Replace("%int%", i.ToString()), "PUT", Encoding.ASCII.GetBytes("{\"sat\":254,\"bri\":" + Brightness(c) + ",\"xy\":" + xy + "}"));
-            }
+                client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"sat\":254,\"bri\":" + Brightness(c) + ",\"xy\":" + xy + "}"));
             client.Dispose();
         }
     }
 
-    public void TurnOn(bool status, Color? c = null)
+    public void TurnOn(bool status, Color? c = null, int? group = null, int? bulp = 0)
     {
         using (var client = new System.Net.WebClient())
         {
             Color selected = Color.White;
             if (c != null)
                 selected = c.Value;
-            var cmd = "groups/%int%/action";
-            var i = 0;
-            var groups = 1;
+            var cmd = "lights/"+bulp+"/state";
+            if(group!=null)
+            cmd = "groups/" + group + "/action";
 
 
-            for (i = 0; i < groups; i++)
-            {
+
+            
                 var xy = JsonConvert.SerializeObject(getRGBtoXY(selected));
-                client.UploadData(url + cmd.Replace("%int%", i.ToString()), "PUT", Encoding.ASCII.GetBytes("{\"on\":" + status.ToString().ToLower() + ",\"bri\":254,\"xy\":" + xy + "}"));
-            }
+                client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"on\":" + status.ToString().ToLower() + ",\"bri\":254,\"xy\":" + xy + "}"));
             client.Dispose();
         }
     }
 
-    public void Effect(string effect = "none")
+    public void Effect(string effect = "none", int? group = null, int? bulp = 0)
     {
         using (var client = new System.Net.WebClient())
         {
             Color selected = Color.White;
-            var cmd = "groups/%int%/action";
-            var i = 0;
-            var groups = 1;
+            var cmd = "lights/" + bulp + "/state";
+            if (group != null)
+                cmd = "groups/" + group + "/action";
 
-
-            for (i = 0; i < groups; i++)
-            {
-                var xy = JsonConvert.SerializeObject(getRGBtoXY(selected));
-                client.UploadData(url + cmd.Replace("%int%", i.ToString()), "PUT", Encoding.ASCII.GetBytes("{\"effect\":\"" + effect + "\"}"));
-            }
+            var xy = JsonConvert.SerializeObject(getRGBtoXY(selected));
+                client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"effect\":\"" + effect + "\"}"));
             client.Dispose();
         }
     }
 
-    public void Alert(string effect, Color? c = null)
+    public void Alert(string effect, Color? c = null,int? group=0, int? bulp = 0)
     {
         using (var client = new System.Net.WebClient())
         {
             Color selected = Color.White;
             if (c != null)
                 selected = c.Value;
-            var cmd = "groups/%int%/action";
-            var i = 0;
-            var groups = 1;
+            var cmd = "lights/" + bulp + "/state";
+            if (group != null)
+                cmd = "groups/" + group + "/action";
 
 
-            for (i = 0; i < groups; i++)
-            {
-                var xy = JsonConvert.SerializeObject(getRGBtoXY(selected));
-                client.UploadData(url + cmd.Replace("%int%", i.ToString()), "PUT", Encoding.ASCII.GetBytes("{\"alert\":\"" + effect + "\"}"));
-            }
+            var xy = JsonConvert.SerializeObject(getRGBtoXY(selected));
+                client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"alert\":\"" + effect + "\"}"));
             client.Dispose();
         }
     }
