@@ -27,7 +27,7 @@ You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
 
         HueBridge.TurnOn(true,Color.Red,1,null)
 
-**Turn off Group ID 0**
+**Turn off Group ID 1**
 
         HueBridge.TurnOn(true,null,1,null)
 
@@ -67,6 +67,6 @@ You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
 
 **Alert on Group ID 1 with Color**
 
-            HueBridge.Alert("lselect",Color.Red,0,null);
+            HueBridge.Alert("lselect",Color.Red,1,null);
             //Or
-            HueBridge.Alert("select",Color.Red,0,null);
+            HueBridge.Alert("select",Color.Red,1,null);
