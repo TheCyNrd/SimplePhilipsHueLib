@@ -7,6 +7,12 @@ You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
 
         PhilipsHue HueBridge = new PhilipsHue("YourBridgeIP", "YourUsername");
 
+**Added GetGroups-Function**
+Helpfull if you dont know the Group id, just use this Method to get a List of Rooms with their ID
+
+        HueBridge.GetGroups();
+        
+
 **Turn on Bulp ID 1**
 
         HueBridge.TurnOn(true,null,null,1);
