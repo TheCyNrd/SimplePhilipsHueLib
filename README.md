@@ -10,7 +10,10 @@ You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
 **Added GetGroups-Function**
 Helpfull if you dont know the Group id, just use this Method to get a List of Rooms with their ID
 
-        HueBridge.GetGroups();
+        HueBridge.GetGroups(); // Dictionary with IDs
+        or
+        HueBridge.GetGroups()["Diningroom"]; //Will output the ID of Diningroom as example.
+        
         
 
 **Turn on Bulp ID 1**
