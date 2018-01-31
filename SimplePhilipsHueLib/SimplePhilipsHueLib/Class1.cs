@@ -117,7 +117,7 @@ public class PhilipsHue
            c.B * c.B * .068);
         return b;
     }
-    public Dictionary<string,int> GetGroups()
+    public Dictionary<string,int> GetRooms()
     {
         Dictionary<string,int> groups = new Dictionary<string,int>();
         using (var client = new System.Net.WebClient())
