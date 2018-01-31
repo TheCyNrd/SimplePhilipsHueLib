@@ -7,10 +7,10 @@ You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
 
         PhilipsHue HueBridge = new PhilipsHue("YourBridgeIP", "YourUsername");
 
-**Added GetGroups-Function**
+**Added GetRooms-Function**
 
        //Helpfull if you dont know the Group id, just use this Method to get a List of Rooms with their ID
-       var Room = HueBridge.GetGroups(); // Dictionary with IDs
+       var Room = HueBridge.GetRooms(); // Dictionary with IDs
        Room["Diningroom"]; //Will output the ID of Diningroom as example.
         
         
