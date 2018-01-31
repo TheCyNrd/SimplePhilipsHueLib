@@ -19,17 +19,17 @@ You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
 
         HueBridge.TurnOn(false,null,null,1);
         
-**Turn on Group ID 0:**
+**Turn on Group ID 1:**
 
-        HueBridge.TurnOn(true,null,0,null)
+        HueBridge.TurnOn(true,null,1,null)
 
-**Turn on Group ID 0 with Color:**
+**Turn on Group ID 1 with Color:**
 
-        HueBridge.TurnOn(true,Color.Red,0,null)
+        HueBridge.TurnOn(true,Color.Red,1,null)
 
-**Turn off Group ID 0**
+**Turn off Group ID 1**
 
-        HueBridge.TurnOn(true,null,0,null)
+        HueBridge.TurnOn(true,null,1,null)
 
 ## Set Color
         
@@ -37,9 +37,9 @@ You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
         
         HueBridge.SetColor(Color.Blue, null,1);
 
-**Change Color of Group ID 0**
+**Change Color of Group ID 1**
         
-        HueBridge.SetColor(Color.Blue, 0);
+        HueBridge.SetColor(Color.Blue, 1);
 
 ## Effects
 
@@ -51,13 +51,13 @@ You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
 
             HueBridge.Effect("none",null,1);
 
-**Colorloop on Group ID 0**
+**Colorloop on Group ID 1**
 
-            HueBridge.Effect("colorloop",0,null);
+            HueBridge.Effect("colorloop",1,null);
 
-**Colorloop off Group ID 0**
+**Colorloop off Group ID 1**
 
-            HueBridge.Effect("none",0,null);
+            HueBridge.Effect("none",1,null);
 
 **Alert on Bulp ID 1 with Color**
 
@@ -67,6 +67,6 @@ You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
 
 **Alert on Group ID 1 with Color**
 
-            HueBridge.Alert("lselect",Color.Red,0,null);
+            HueBridge.Alert("lselect",Color.Red,1,null);
             //Or
-            HueBridge.Alert("select",Color.Red,0,null);
+            HueBridge.Alert("select",Color.Red,1,null);
