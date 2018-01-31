@@ -1,11 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Web.Script.Serialization;
 public class PhilipsHue
 {
     static List<Double> Doubles;
@@ -17,7 +16,7 @@ public class PhilipsHue
     {
         ip = Ip;
         Username = username;
-        url = "http://" + ip + "/api/" + Username + "/";
+        url = "https://" + ip + "/api/" + Username + "/";
     }
     private List<Double> getRGBtoXY(Color c)
     {
@@ -39,20 +38,20 @@ public class PhilipsHue
 
     }
 
-    public void SetLight(Color color, int? group = null,int? bulp=0)
+    public void SetColor(Color? color=null, int? group = null,int? bulp=0)
     {
         using (var client = new System.Net.WebClient())
         {
-            Random rnd = new Random();
-            Color c = Color.White;
+            Color selected = Color.White;
+            if (color != null)
+                selected = color.Value;
             var cmd = "/lights/" + bulp + "/state";
             if(group != null)
             cmd = "groups/" + group + "/action";
             
-            
-                c = color;
-                var xy = JsonConvert.SerializeObject(getRGBtoXY(color));
-                client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"sat\":254,\"bri\":" + Brightness(c) + ",\"xy\":" + xy + "}"));
+
+            var xy = new JavaScriptSerializer().Serialize(getRGBtoXY(selected));
+            client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"sat\":254,\"bri\":" + "254" + ",\"xy\":" + xy + "}"));
             client.Dispose();
         }
     }
@@ -71,7 +70,7 @@ public class PhilipsHue
 
 
             
-                var xy = JsonConvert.SerializeObject(getRGBtoXY(selected));
+                var xy = new JavaScriptSerializer().Serialize(getRGBtoXY(selected));  
                 client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"on\":" + status.ToString().ToLower() + ",\"bri\":254,\"xy\":" + xy + "}"));
             client.Dispose();
         }
@@ -86,8 +85,8 @@ public class PhilipsHue
             if (group != null)
                 cmd = "groups/" + group + "/action";
 
-            var xy = JsonConvert.SerializeObject(getRGBtoXY(selected));
-                client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"effect\":\"" + effect + "\"}"));
+            var xy = new JavaScriptSerializer().Serialize(getRGBtoXY(selected));
+            client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"effect\":\"" + effect + "\"}"));
             client.Dispose();
         }
     }
@@ -104,8 +103,8 @@ public class PhilipsHue
                 cmd = "groups/" + group + "/action";
 
 
-            var xy = JsonConvert.SerializeObject(getRGBtoXY(selected));
-                client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"alert\":\"" + effect + "\"}"));
+            var xy = new JavaScriptSerializer().Serialize(getRGBtoXY(selected));
+            client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"alert\":\"" + effect + "\",\"xy\":"+xy+"}"));
             client.Dispose();
         }
     }
@@ -117,5 +116,36 @@ public class PhilipsHue
            c.G * c.G * .691 +
            c.B * c.B * .068);
         return b;
+    }
+    public Dictionary<string,int> GetGroups()
+    {
+        Dictionary<string,int> groups = new Dictionary<string,int>();
+        using (var client = new System.Net.WebClient())
+        {
+            var groupjson = client.DownloadString(url+"groups");
+            var json = (Dictionary<string,object>)DeserializeJson<object>(groupjson);
+            foreach(var j in json)
+            {
+                var id = int.Parse(j.Key);
+                var js = (Dictionary<string, object>)j.Value;
+                foreach (var jso in js)
+                {
+                    if (jso.Key == "name")
+                    {
+                        groups.Add(jso.Value.ToString(), id);
+                    }
+                }
+            }
+        }
+        return groups;
+    }
+    public object DeserializeJson<T>(string Json)
+    {
+        JavaScriptSerializer JavaScriptSerializer = new JavaScriptSerializer();
+        return JavaScriptSerializer.Deserialize<T>(Json);
+    }
+    public static string[] Convert(object input)
+    {
+        return input as string[];
     }
 }
