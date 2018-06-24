@@ -8,9 +8,11 @@ You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
         PhilipsHue HueBridge = new PhilipsHue("YourBridgeIP", "YourUsername");
 
 **Added FindBridge & LinkBridge Function**
-        var bridgeip = PhilipsHue.FindBridge();
+
+       var bridgeip = PhilipsHue.FindBridge();
         var username = PhilipsHue.BridgeLink(bridgeip);
-        PhilipsHue HueBridge = new PhilipsHue(bridgeip, username);
+               PhilipsHue HueBridge = new PhilipsHue(bridgeip, username);
+
 **Added GetRooms-Function**
 
        //Helpfull if you dont know the Group id, just use this Method to get a List of Rooms with their ID
