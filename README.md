@@ -9,9 +9,9 @@ You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
 
 **Added FindBridge & LinkBridge Function**
 
-       var bridgeip = PhilipsHue.FindBridge();
-        var username = PhilipsHue.BridgeLink(bridgeip);
-               PhilipsHue HueBridge = new PhilipsHue(bridgeip, username);
+       var bridgeip = PhilipsHue.FindBridge(); //automatically detects ip of Bridge
+       var username = PhilipsHue.LinkBridge(bridgeip); //generate new username, save username for later use.
+       PhilipsHue HueBridge = new PhilipsHue(bridgeip, username);
 
 **Added GetRooms-Function**
 
