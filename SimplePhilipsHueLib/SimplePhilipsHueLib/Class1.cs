@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
@@ -16,7 +17,7 @@ public class PhilipsHue
     {
         ip = Ip;
         Username = username;
-        url = "https://" + ip + "/api/" + Username + "/";
+        url = "http://" + ip + "/api/" + Username + "/";
     }
     private List<Double> getRGBtoXY(Color c)
     {
@@ -38,7 +39,7 @@ public class PhilipsHue
 
     }
 
-    public void SetColor(Color? color=null, int? group = null,int? bulp=0)
+    public void SetColor(Color? color = null, int? group = null, int? bulp = 0)
     {
         using (var client = new System.Net.WebClient())
         {
@@ -46,9 +47,9 @@ public class PhilipsHue
             if (color != null)
                 selected = color.Value;
             var cmd = "/lights/" + bulp + "/state";
-            if(group != null)
-            cmd = "groups/" + group + "/action";
-            
+            if (group != null)
+                cmd = "groups/" + group + "/action";
+
 
             var xy = new JavaScriptSerializer().Serialize(getRGBtoXY(selected));
             client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"sat\":254,\"bri\":" + "254" + ",\"xy\":" + xy + "}"));
@@ -63,15 +64,15 @@ public class PhilipsHue
             Color selected = Color.White;
             if (c != null)
                 selected = c.Value;
-            var cmd = "lights/"+bulp+"/state";
-            if(group!=null)
-            cmd = "groups/" + group + "/action";
+            var cmd = "lights/" + bulp + "/state";
+            if (group != null)
+                cmd = "groups/" + group + "/action";
 
 
 
-            
-                var xy = new JavaScriptSerializer().Serialize(getRGBtoXY(selected));  
-                client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"on\":" + status.ToString().ToLower() + ",\"bri\":254,\"xy\":" + xy + "}"));
+
+            var xy = new JavaScriptSerializer().Serialize(getRGBtoXY(selected));
+            client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"on\":" + status.ToString().ToLower() + ",\"bri\":254,\"xy\":" + xy + "}"));
             client.Dispose();
         }
     }
@@ -91,7 +92,7 @@ public class PhilipsHue
         }
     }
 
-    public void Alert(string effect, Color? c = null,int? group=0, int? bulp = 0)
+    public void Alert(string effect, Color? c = null, int? group = 0, int? bulp = 0)
     {
         using (var client = new System.Net.WebClient())
         {
@@ -104,7 +105,7 @@ public class PhilipsHue
 
 
             var xy = new JavaScriptSerializer().Serialize(getRGBtoXY(selected));
-            client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"alert\":\"" + effect + "\",\"xy\":"+xy+"}"));
+            client.UploadData(url + cmd, "PUT", Encoding.ASCII.GetBytes("{\"alert\":\"" + effect + "\",\"xy\":" + xy + "}"));
             client.Dispose();
         }
     }
@@ -117,14 +118,55 @@ public class PhilipsHue
            c.B * c.B * .068);
         return b;
     }
-    public Dictionary<string,int> GetRooms()
+
+    static public string LinkBridge(string bridgeip)
     {
-        Dictionary<string,int> groups = new Dictionary<string,int>();
+        var username = "";
+        Username:
+        if (username == "")
+        {
+            username = GenerateUsername(bridgeip);
+            System.Threading.Thread.Sleep(5000);
+            if (username == "")
+                goto Username;
+            else return username;
+        }
+        if (username != "")
+            return username;
+        else return "";
+    }
+
+    public static string GenerateUsername(string bridgeip)
+    {
+        var uid = Guid.NewGuid().ToString().Substring(0, 5);
+        var jss = new JavaScriptSerializer();
+        var command = "{\"devicetype\": \"" + uid + "#iphone " + uid + "\"}";
         using (var client = new System.Net.WebClient())
         {
-            var groupjson = client.DownloadString(url+"groups");
-            var json = (Dictionary<string,object>)DeserializeJson<object>(groupjson);
-            foreach(var j in json)
+            var cmd = "/api";
+            byte[] response = client.UploadData("http://" + bridgeip + cmd, "POST", Encoding.ASCII.GetBytes(command));
+            string s = client.Encoding.GetString(response);
+            var user = "";
+            var json = jss.Deserialize<dynamic>(s);
+            try
+            {
+                user = json[0]["success"]["username"];
+            }
+            catch { }
+            return user;
+            client.Dispose();
+        }
+
+    }
+
+    public Dictionary<string, int> GetRooms()
+    {
+        Dictionary<string, int> groups = new Dictionary<string, int>();
+        using (var client = new System.Net.WebClient())
+        {
+            var groupjson = client.DownloadString(url + "groups");
+            var json = (Dictionary<string, object>)DeserializeJson<object>(groupjson);
+            foreach (var j in json)
             {
                 var id = int.Parse(j.Key);
                 var js = (Dictionary<string, object>)j.Value;
@@ -139,11 +181,42 @@ public class PhilipsHue
         }
         return groups;
     }
-    public object DeserializeJson<T>(string Json)
+
+    static public string FindBridge()
+    {
+        var bridgeip = "";
+        for (int i = 1; i < 255; i++)
+        {
+            try
+            {
+                bridgeip = "192.168.1." + i;
+
+                //Creating the HttpWebRequest
+                HttpWebRequest request = WebRequest.Create("http://" + bridgeip + "/debug/clip.html") as HttpWebRequest;
+                request.Timeout = 50;
+                //Setting the Request method HEAD, you can also use GET too.
+                request.Method = "HEAD";
+                //Getting the Web Response.
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                //Returns TRUE if the Status code == 200
+                response.Close();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return bridgeip;
+            }
+            catch
+            {
+
+            }
+        }
+        return "";
+    }
+     
+    public static object DeserializeJson<T>(string Json)
     {
         JavaScriptSerializer JavaScriptSerializer = new JavaScriptSerializer();
         return JavaScriptSerializer.Deserialize<T>(Json);
     }
+
     public static string[] Convert(object input)
     {
         return input as string[];
