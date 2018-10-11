@@ -44,7 +44,7 @@ You can get it here: https://github.com/TheCynNrd/SimplePhilipsHueLibTestApp
 
 **Turn off Group ID 1**
 
-        HueBridge.TurnOn(true,null,1,null)
+        HueBridge.TurnOn(false,null,1,null)
 
 ## Set Color
         
