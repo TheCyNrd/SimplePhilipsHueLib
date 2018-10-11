@@ -43,7 +43,7 @@ public class PhilipsHue
     {
         using (var client = new System.Net.WebClient())
         {
-            Color selected = Color.White;
+            Color selected =  Color.FromArgb(255, 207, 120);
             if (color != null)
                 selected = color.Value;
             var cmd = "/lights/" + bulp + "/state";
