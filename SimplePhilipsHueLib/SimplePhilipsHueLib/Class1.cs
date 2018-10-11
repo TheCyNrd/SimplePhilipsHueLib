@@ -61,7 +61,7 @@ public class PhilipsHue
     {
         using (var client = new System.Net.WebClient())
         {
-            Color selected = Color.White;
+            Color selected = Color.FromArgb(255, 207, 120);
             if (c != null)
                 selected = c.Value;
             var cmd = "lights/" + bulp + "/state";
@@ -81,7 +81,7 @@ public class PhilipsHue
     {
         using (var client = new System.Net.WebClient())
         {
-            Color selected = Color.White;
+            Color selected = Color.FromArgb(255, 207, 120);
             var cmd = "lights/" + bulp + "/state";
             if (group != null)
                 cmd = "groups/" + group + "/action";
@@ -96,7 +96,7 @@ public class PhilipsHue
     {
         using (var client = new System.Net.WebClient())
         {
-            Color selected = Color.White;
+            Color selected = Color.FromArgb(255, 207, 120);
             if (c != null)
                 selected = c.Value;
             var cmd = "lights/" + bulp + "/state";
@@ -119,7 +119,7 @@ public class PhilipsHue
         return b;
     }
 
-    static public string LinkBridge(string bridgeip)
+    static public string BridgeLink(string bridgeip)
     {
         var username = "";
         Username:
@@ -174,7 +174,8 @@ public class PhilipsHue
                 {
                     if (jso.Key == "name")
                     {
-                        groups.Add(jso.Value.ToString(), id);
+                        if (!groups.ContainsKey(jso.Value.ToString()))
+                            groups.Add(jso.Value.ToString(), id);
                     }
                 }
             }
@@ -210,7 +211,7 @@ public class PhilipsHue
         }
         return "";
     }
-     
+
     public static object DeserializeJson<T>(string Json)
     {
         JavaScriptSerializer JavaScriptSerializer = new JavaScriptSerializer();
